@@ -262,6 +262,16 @@ public class UserService {
         if (users.get(userIndex).getRole().equals("Admin")) {
             return -2; // user is an admin and should not be able to rate
         }
+        // check if user bought this product or no
+        boolean productPurchesed = false;
+        for (Product p : users.get(userIndex).getHistory()) {
+            if (p.getProductId().equals(productId)) {
+                productPurchesed = true;
+            }
+        }
+        if (!productPurchesed) {
+            return -4;// user did not purchase this product
+        }
         double totalOfRatings =    productService.products.get(productIndex).getRatingCount() *   productService.products.get(productIndex).getAverageRating();
         productService.products.get(productIndex).setRatingCount(  productService.products.get(productIndex).getRatingCount()+1);
         double newAvg = (totalOfRatings + rating)/   productService.products.get(productIndex).getRatingCount();
